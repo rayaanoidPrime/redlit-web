@@ -16,7 +16,7 @@ import { CTA } from '../components/CTA'
 import { Footer } from '../components/Footer'
 
 const Index = () => (
-  <div>Hellow World</div>
+  <div>Hellowwww World</div>
 )
 
 export default Index
