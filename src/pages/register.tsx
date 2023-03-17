@@ -7,43 +7,84 @@ import {
     FormControl,
     Input,
     Button,
+    Box,
 } from '@chakra-ui/react'
 import Wrapper from '../components/wrapper'
+import { useMutation } from 'urql';
 
 
 type Inputs = React.InputHTMLAttributes<HTMLInputElement> & {
-    name: string;
+    label: string,
+    username: string;
+    password: string
 };
 
 type registerProps = {
 
 }
 
+const REGISTER_MUT = `
+mutation Register($username: String, $password: String) {
+    register(username: $username, password: $password) {
+      errors {
+        field
+        message
+      }
+      user {
+        id
+        username
+        createdAt
+        updatedAt
+      }
+    }
+}
+`
+
 const Register: React.FC<registerProps> = ({ }) => {
 
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Inputs>();
-    const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
-
+    const [, Register] = useMutation(REGISTER_MUT);
+    const onSubmit: SubmitHandler<Inputs> = (values) => {
+        console.log(values);
+        Register(values)
+    }
 
     return (
         <Wrapper variant={'small'}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <FormControl isInvalid={!!errors.name}>
-                    <FormLabel htmlFor='name'>First name</FormLabel>
+                <FormControl isInvalid={!!errors.username || !!errors.password}>
+
+                    <FormLabel htmlFor='username'>Username</FormLabel>
                     <Input
-                        id='name'
-                        placeholder='name'
-                        {...register('name', {
+                        name='username'
+                        id='username'
+                        placeholder='username'
+                        {...register('username', {
                             required: 'This is required',
-                            minLength: { value: 4, message: 'Minimum length should be 4' },
                         })}
                     />
                     <FormErrorMessage>
-                        {errors.name && errors.name.message}
+                        {errors.username && errors.username.message}
                     </FormErrorMessage>
+                    <Box mt={5}>
+                        <FormLabel htmlFor='Password'>Password</FormLabel>
+                        <Input
+                            name='Password'
+                            id='password'
+                            placeholder='password'
+                            type={'password'}
+                            {...register('password', {
+                                required: 'This is required',
+                                minLength: { value: 4, message: 'Minimum length should be 4' },
+                            })}
+                        />
+                        <FormErrorMessage>
+                            {errors.password && errors.password.message}
+                        </FormErrorMessage>
+                    </Box>
                 </FormControl>
                 <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
-                    Submit
+                    Register
                 </Button>
             </form>
         </Wrapper>
