@@ -11,6 +11,8 @@ import {
 } from '@chakra-ui/react'
 import Wrapper from '../components/wrapper'
 import { useMutation } from 'urql';
+import { useRegisterMutation } from '../generated/graphql';
+import { toErrorMap } from '../utils/toErrorMap';
 
 
 type Inputs = React.InputHTMLAttributes<HTMLInputElement> & {
@@ -19,34 +21,26 @@ type Inputs = React.InputHTMLAttributes<HTMLInputElement> & {
     password: string
 };
 
-type registerProps = {
-
-}
-
-const REGISTER_MUT = `
-mutation Register($username: String, $password: String) {
-    register(username: $username, password: $password) {
-      errors {
-        field
-        message
-      }
-      user {
-        id
-        username
-        createdAt
-        updatedAt
-      }
-    }
-}
-`
+type registerProps = {}
 
 const Register: React.FC<registerProps> = ({ }) => {
 
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<Inputs>();
-    const [, Register] = useMutation(REGISTER_MUT);
-    const onSubmit: SubmitHandler<Inputs> = (values) => {
+    const { register, setError, handleSubmit, formState: { errors, isSubmitting } } = useForm<Inputs>();
+    const [, Register] = useRegisterMutation();
+    const onSubmit: SubmitHandler<Inputs> = async (values) => {
         console.log(values);
-        Register(values)
+        const response = await Register(values);
+        if (response.data?.register.errors) {
+            console.log(response.data.register.errors)
+            response.data.register.errors.forEach(({ field, message }) => {
+                if (field === 'username') {
+                    setError('username', { message: message })
+                }
+                if (field === 'password') {
+                    setError('password', { message: message });
+                }
+            })
+        }
     }
 
     return (
