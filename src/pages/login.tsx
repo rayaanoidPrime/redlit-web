@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import Wrapper from '../components/wrapper'
 import { useMutation } from 'urql';
-import { useRegisterMutation } from '../generated/graphql';
+import { useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { useRouter } from 'next/router';
 
@@ -22,18 +22,18 @@ type Inputs = React.InputHTMLAttributes<HTMLInputElement> & {
     password: string
 };
 
-type registerProps = {}
 
-const Register: React.FC<registerProps> = ({ }) => {
+const Login: React.FC<{}> = ({ }) => {
     const router = useRouter();
     const { register, setError, handleSubmit, formState: { errors, isSubmitting } } = useForm<Inputs>();
-    const [, Register] = useRegisterMutation();
+    const [, Login] = useLoginMutation();
     const onSubmit: SubmitHandler<Inputs> = async (values) => {
         console.log('input', values);
-        const response = await Register(values);
-        if (response.data?.register.errors) {
-            console.log("errors : ", response.data.register.errors)
-            response.data.register.errors.forEach(({ field, message }) => {
+
+        const response = await Login(values, { fetchOptions: { credentials: 'include' } });
+        if (response.data?.login.errors) {
+            console.log("errors : ", response.data.login.errors)
+            response.data.login.errors.forEach(({ field, message }) => {
                 if (field === 'username') {
                     setError('username', { message: message })
                 }
@@ -42,7 +42,7 @@ const Register: React.FC<registerProps> = ({ }) => {
                 }
             })
         }
-        else if (response.data?.register.user) {
+        else if (response.data?.login.user) {
             //worked 
             router.push('/');
         }
@@ -83,11 +83,11 @@ const Register: React.FC<registerProps> = ({ }) => {
                     </Box>
                 </FormControl>
                 <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
-                    Register
+                    Login
                 </Button>
             </form>
         </Wrapper>
     );
 }
 
-export default Register;
+export default Login;

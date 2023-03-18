@@ -107,6 +107,19 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
 };
 
+export type LoginMutationVariables = Exact<{
+  username?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string } | null> | null, user?: { __typename?: 'User', id: number, username: string, createdAt: any, updatedAt: any } | null } | null };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string } | null };
+
 export type RegisterMutationVariables = Exact<{
   username?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
@@ -116,6 +129,38 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string } | null> | null, user?: { __typename?: 'User', id: number, username: string, createdAt: any, updatedAt: any } | null } | null };
 
 
+export const LoginDocument = gql`
+    mutation Login($username: String, $password: String) {
+  login(username: $username, password: $password) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      username
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const MeDocument = gql`
+    query Me {
+  me {
+    id
+    username
+  }
+}
+    `;
+
+export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
+  return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
+};
 export const RegisterDocument = gql`
     mutation Register($username: String, $password: String) {
   register(username: $username, password: $password) {
