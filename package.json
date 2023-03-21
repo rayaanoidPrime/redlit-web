@@ -16,9 +16,11 @@
     "framer-motion": "^6.5.1",
     "graphql": "^16.6.0",
     "next": "^13.2.4",
+    "next-urql": "^4.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.5",
+    "react-is": "^18.2.0",
     "urql": "^3.0.4"
   },
   "devDependencies": {
