@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form"
 import {
     FormErrorMessage,
@@ -10,10 +9,10 @@ import {
     Box,
 } from '@chakra-ui/react'
 import Wrapper from '../components/wrapper'
-import { useMutation } from 'urql';
 import { useLoginMutation } from '../generated/graphql';
-import { toErrorMap } from '../utils/toErrorMap';
 import { useRouter } from 'next/router';
+import { withUrqlClient } from 'next-urql';
+import { createUrqlClient } from '../utils/createUrqlClient';
 
 
 type Inputs = React.InputHTMLAttributes<HTMLInputElement> & {
@@ -90,4 +89,4 @@ const Login: React.FC<{}> = ({ }) => {
     );
 }
 
-export default Login;
+export default withUrqlClient(createUrqlClient)(Login)
