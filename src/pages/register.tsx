@@ -37,8 +37,7 @@ const Register: React.FC<registerProps> = ({ }) => {
             console.log("errors : ", response.data.register.errors)
             response.data.register.errors.forEach(({ field, message }) => {
                 if (field === 'username') {
-                    setError('username', { message: message })
-                }
+                 }
                 if (field === 'password') {
                     setError('password', { message: message });
                 }
@@ -70,7 +69,7 @@ const Register: React.FC<registerProps> = ({ }) => {
                     <Box mt={5}>
                         <FormLabel htmlFor='Password'>Password</FormLabel>
                         <Input
-                            name='Password'
+                      ]      name='Password'
                             id='password'
                             placeholder='password'
                             type={'password'}
