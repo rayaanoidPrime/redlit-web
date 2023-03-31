@@ -69,7 +69,7 @@ const Register: React.FC<registerProps> = ({ }) => {
                     <Box mt={5}>
                         <FormLabel htmlFor='Password'>Password</FormLabel>
                         <Input
-                      ]      name='Password'
+                            name='Password'
                             id='password'
                             placeholder='password'
                             type={'password'}

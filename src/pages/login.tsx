@@ -16,8 +16,7 @@ import { createUrqlClient } from '../utils/createUrqlClient';
 
 
 type Inputs = React.InputHTMLAttributes<HTMLInputElement> & {
-    label: string,
-    username: string;
+    usernameOrEmail: string;
     password: string
 };
 
@@ -33,8 +32,8 @@ const Login: React.FC<{}> = ({ }) => {
         if (response.data?.login.errors) {
             console.log("errors : ", response.data.login.errors)
             response.data.login.errors.forEach(({ field, message }) => {
-                if (field === 'username') {
-                    setError('username', { message: message })
+                if (field === 'username' || field === 'email') {
+                    setError('usernameOrEmail', { message: message })
                 }
                 if (field === 'password') {
                     setError('password', { message: message });
@@ -50,19 +49,19 @@ const Login: React.FC<{}> = ({ }) => {
     return (
         <Wrapper variant={'small'}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <FormControl isInvalid={!!errors.username || !!errors.password}>
+                <FormControl isInvalid={!!errors.usernameOrEmail || !!errors.password}>
 
-                    <FormLabel htmlFor='username'>Username</FormLabel>
+                    <FormLabel htmlFor='usernameOrEmail'>Username Or Email</FormLabel>
                     <Input
-                        name='username'
-                        id='username'
-                        placeholder='username'
-                        {...register('username', {
+                        name='usernameOrEmail'
+                        id='usernameOrEmail'
+                        placeholder='Username Or Email'
+                        {...register('usernameOrEmail', {
                             required: 'This is required',
                         })}
                     />
                     <FormErrorMessage>
-                        {errors.username && errors.username.message}
+                        {errors.usernameOrEmail && errors.usernameOrEmail.message}
                     </FormErrorMessage>
                     <Box mt={5}>
                         <FormLabel htmlFor='Password'>Password</FormLabel>
