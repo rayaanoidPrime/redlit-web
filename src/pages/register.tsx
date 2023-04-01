@@ -19,7 +19,7 @@ import { withUrqlClient } from 'next-urql';
 
 
 type Inputs = React.InputHTMLAttributes<HTMLInputElement> & {
-    label: string,
+    email: string,
     username: string;
     password: string
 };
@@ -37,9 +37,13 @@ const Register: React.FC<registerProps> = ({ }) => {
             console.log("errors : ", response.data.register.errors)
             response.data.register.errors.forEach(({ field, message }) => {
                 if (field === 'username') {
+                    setError('username', { message: message });
                  }
                 if (field === 'password') {
                     setError('password', { message: message });
+                }
+                if (field === 'email') {
+                    setError('email', { message: message });
                 }
             })
         }
@@ -52,10 +56,10 @@ const Register: React.FC<registerProps> = ({ }) => {
     return (
         <Wrapper variant={'small'}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <FormControl isInvalid={!!errors.username || !!errors.password}>
+                <FormControl isInvalid={!!errors.username || !!errors.password || !!errors.email}>
 
                     <FormLabel htmlFor='username'>Username</FormLabel>
-                    <Input
+                    <Input 
                         name='username'
                         id='username'
                         placeholder='username'
@@ -66,6 +70,20 @@ const Register: React.FC<registerProps> = ({ }) => {
                     <FormErrorMessage>
                         {errors.username && errors.username.message}
                     </FormErrorMessage>
+                    <Box mt={5}>
+                        <FormLabel htmlFor='email'>Email</FormLabel>
+                        <Input
+                            name='email'
+                            id='email'
+                            placeholder='Email'
+                            {...register('email', {
+                                required: 'This is required',
+                            })}
+                        />
+                        <FormErrorMessage>
+                            {errors.email && errors.email.message}
+                        </FormErrorMessage>
+                        </Box>
                     <Box mt={5}>
                         <FormLabel htmlFor='Password'>Password</FormLabel>
                         <Input

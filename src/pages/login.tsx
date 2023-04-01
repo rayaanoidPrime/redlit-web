@@ -32,7 +32,7 @@ const Login: React.FC<{}> = ({ }) => {
         if (response.data?.login.errors) {
             console.log("errors : ", response.data.login.errors)
             response.data.login.errors.forEach(({ field, message }) => {
-                if (field === 'username' || field === 'email') {
+                if (field === 'usernameOrEmail') {
                     setError('usernameOrEmail', { message: message })
                 }
                 if (field === 'password') {

@@ -107,8 +107,8 @@ export type UserResponse = {
 export type RegularUserFragment = { __typename?: 'User', id: number, username: string };
 
 export type LoginMutationVariables = Exact<{
-  usernameOrEmail: Scalars['String'];
-  password: Scalars['String'];
+  usernameOrEmail?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -145,7 +145,7 @@ export const RegularUserFragmentDoc = gql`
 }
     `;
 export const LoginDocument = gql`
-    mutation Login($usernameOrEmail: String!, $password: String!) {
+    mutation Login($usernameOrEmail: String, $password: String) {
   login(usernameOrEmail: $usernameOrEmail, password: $password) {
     errors {
       field
