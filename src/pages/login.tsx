@@ -7,13 +7,14 @@ import {
     Input,
     Button,
     Box,
+    Flex,
 } from '@chakra-ui/react'
 import Wrapper from '../components/wrapper'
 import { useLoginMutation } from '../generated/graphql';
 import { useRouter } from 'next/router';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
-
+import NextLink from 'next/link';
 
 type Inputs = React.InputHTMLAttributes<HTMLInputElement> & {
     usernameOrEmail: string;
@@ -80,9 +81,13 @@ const Login: React.FC<{}> = ({ }) => {
                         </FormErrorMessage>
                     </Box>
                 </FormControl>
-                <Button mt={4} colorScheme='teal' isLoading={isSubmitting} type='submit'>
-                    Login
-                </Button>
+                <Flex style={{justifyContent: 'space-between'}}>
+                    <Button mt={10} colorScheme='teal' isLoading={isSubmitting} type='submit'>
+                        Login
+                    </Button>
+                    <NextLink href='/forgot-password' style={{fontSize : 14  , marginTop : 10}} >Forgot Password?</NextLink>
+                </Flex>
+                
             </form>
         </Wrapper>
     );
