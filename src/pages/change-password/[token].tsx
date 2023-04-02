@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { toErrorMap } from '../../utils/toErrorMap';
 import { createUrqlClient } from '../../utils/createUrqlClient';
 import { withUrqlClient } from 'next-urql';
-
+import NextLink from 'next/link'
 
 type ChangePassInputs = {
     token : string,
@@ -58,7 +58,12 @@ const ChangePassword : NextPage<{token : string}> = ({token}) => {
                             required: 'This is required',
                         })}
                     />
-                    {tokenError ? ( <Box style={{color : 'red' ,  fontSize : 14}}>{tokenError}</Box>) : null}
+                    {tokenError ? ( 
+                        <Box>
+                            <Box style={{color : 'red' ,  fontSize : 14}}>{tokenError}</Box>
+                            <NextLink href='/forgot-password' style={{fontSize : 14}} >Go Forget it again</NextLink>
+                        </Box>
+                    ) : null}
 
                     <FormErrorMessage>
                         {errors.newPassword && errors.newPassword.message}
