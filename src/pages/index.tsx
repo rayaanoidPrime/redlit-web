@@ -8,7 +8,7 @@ import { useAllPostsQuery } from '../generated/graphql';
 const Index = () => {
 
   const [{data , fetching}] = useAllPostsQuery();
-
+  console.log("data" ,data)
   return ( 
     <>
     <NavBar />

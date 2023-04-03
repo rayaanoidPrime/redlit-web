@@ -42,6 +42,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationCreatePostArgs = {
+  text?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
 };
 
@@ -76,8 +77,11 @@ export type MutationUpdatePostArgs = {
 
 export type Post = {
   __typename?: 'Post';
+  authorId?: Maybe<Scalars['Int']>;
   createdAt: Scalars['DateTime'];
   id: Scalars['Int'];
+  points?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
 };
@@ -126,6 +130,14 @@ export type ChangePasswordMutationVariables = Exact<{
 
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword?: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string } | null> | null, user?: { __typename?: 'User', id: number, username: string, email: string, createdAt: any, updatedAt: any } | null } | null };
+
+export type CreatePostMutationVariables = Exact<{
+  title?: InputMaybe<Scalars['String']>;
+  text?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', id: number, createdAt: any, updatedAt: any, title?: string | null, text?: string | null, authorId?: number | null, points?: number | null } | null };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email?: InputMaybe<Scalars['String']>;
@@ -192,6 +204,23 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreatePostDocument = gql`
+    mutation CreatePost($title: String, $text: String) {
+  createPost(title: $title, text: $text) {
+    id
+    createdAt
+    updatedAt
+    title
+    text
+    authorId
+    points
+  }
+}
+    `;
+
+export function useCreatePostMutation() {
+  return Urql.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String) {
