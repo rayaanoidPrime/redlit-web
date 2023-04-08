@@ -1,11 +1,12 @@
 import { FormControl, FormLabel,Box, Input, FormErrorMessage, Flex, Button, Textarea } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Wrapper from "../components/wrapper";
-import NextLink from 'next/link';
-import { useCreatePostMutation } from "../generated/graphql";
+import  Wrapper  from "../components/wrapper";
+import { useCreatePostMutation, useMeQuery } from "../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { useEffect } from "react";
+import { useIsAuth } from "../utils/useIsAuth";
 
 
 type CreatePostInputs = {
@@ -15,6 +16,7 @@ type CreatePostInputs = {
 
 const CreatePost : React.FC<{}> = ({}) => {
     const router = useRouter();
+    useIsAuth();
     const { register, setError, handleSubmit, formState: { errors, isSubmitting } } = useForm<CreatePostInputs>();
     const [ , CreatePost] = useCreatePostMutation();
     const onSubmit : SubmitHandler<CreatePostInputs> = async(values) => {

@@ -1,8 +1,11 @@
-query AllPosts {
-  allposts {
+query Allposts($limit: Int!, $cursor: String) {
+  allposts(limit: $limit, cursor: $cursor) {
     id
     createdAt
     updatedAt
     title
+    text
+    points
+    authorId
   }
 }

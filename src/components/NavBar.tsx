@@ -12,12 +12,12 @@ interface NavBarProps {
 export const NavBar: React.FC<NavBarProps> = ({ }) => {
     const [ {fetching : logoutFetching} , Logout] = useLogoutMutation();
     const [{ data, fetching }] = useMeQuery({
-        pause : isServer()  
+        pause : isServer() 
     });
     let body = null;
-    // console.log("me query navbar : ", data);
+    console.log("me query navbar : ", data);
     if (fetching) {
-        console.log("loading")
+        console.log("loading...")
         //data is loading
     }
     else if (!data?.me) {

@@ -15,7 +15,7 @@ type ChangePassInputs = {
     newPassword : string,
 }
 
-const ChangePassword : NextPage<{token : string}> = ({token}) => {
+const ChangePassword : NextPage = () => {
     
     const [tokenError, setTokenError] = useState('');
     const router = useRouter();
@@ -23,7 +23,10 @@ const ChangePassword : NextPage<{token : string}> = ({token}) => {
     const [ , ChangePassword] = useChangePasswordMutation();
    
     const onSubmit : SubmitHandler<ChangePassInputs> = async(values) => {
-         const response = await ChangePassword({newPassword : values.newPassword , token : token});
+         const response = await ChangePassword({
+            newPassword : values.newPassword ,
+            token : typeof router.query.token === 'string' ? router.query.token : "",
+         });
          if(response.data?.changePassword.errors){
             
             const errMap = toErrorMap(response.data.changePassword.errors)
@@ -79,11 +82,7 @@ const ChangePassword : NextPage<{token : string}> = ({token}) => {
     );   
 }
 
-ChangePassword.getInitialProps = ({query}) => {
-    return {
-        token : query.token as string
-    }
-}
+
 
 
 export default withUrqlClient(createUrqlClient , {ssr : false})(ChangePassword)

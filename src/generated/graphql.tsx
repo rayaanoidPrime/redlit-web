@@ -97,6 +97,12 @@ export type Query = {
 };
 
 
+export type QueryAllpostsArgs = {
+  cursor?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type QueryPostArgs = {
   id?: InputMaybe<Scalars['Int']>;
 };
@@ -168,10 +174,13 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string } | null> | null, user?: { __typename?: 'User', id: number, email: string, username: string, createdAt: any, updatedAt: any } | null } | null };
 
-export type AllPostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type AllpostsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
 
 
-export type AllPostsQuery = { __typename?: 'Query', allposts?: Array<{ __typename?: 'Post', id: number, createdAt: any, updatedAt: any, title?: string | null } | null> | null };
+export type AllpostsQuery = { __typename?: 'Query', allposts?: Array<{ __typename?: 'Post', id: number, createdAt: any, updatedAt: any, title?: string | null, text?: string | null, points?: number | null, authorId?: number | null } | null> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -282,19 +291,22 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
-export const AllPostsDocument = gql`
-    query AllPosts {
-  allposts {
+export const AllpostsDocument = gql`
+    query Allposts($limit: Int!, $cursor: String) {
+  allposts(limit: $limit, cursor: $cursor) {
     id
     createdAt
     updatedAt
     title
+    text
+    points
+    authorId
   }
 }
     `;
 
-export function useAllPostsQuery(options?: Omit<Urql.UseQueryArgs<AllPostsQueryVariables>, 'query'>) {
-  return Urql.useQuery<AllPostsQuery, AllPostsQueryVariables>({ query: AllPostsDocument, ...options });
+export function useAllpostsQuery(options: Omit<Urql.UseQueryArgs<AllpostsQueryVariables>, 'query'>) {
+  return Urql.useQuery<AllpostsQuery, AllpostsQueryVariables>({ query: AllpostsDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {
