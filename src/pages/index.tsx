@@ -1,13 +1,16 @@
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
-import { useAllPostsQuery } from '../generated/graphql';
+import { useAllpostsQuery } from '../generated/graphql';
 import { Layout } from '../components/layout';
 import NextLink from 'next/link';
 
 
 const Index : React.FC = () => {
-
-  const [{data , fetching}] = useAllPostsQuery();
+  const [{data , fetching}] = useAllpostsQuery({
+    variables : {
+      limit : 100,
+    }
+  });
   return ( 
     <Layout>
       <div>Hellow World</div>
