@@ -75,6 +75,12 @@ export type MutationUpdatePostArgs = {
   title?: InputMaybe<Scalars['String']>;
 };
 
+export type PaginatedPosts = {
+  __typename?: 'PaginatedPosts';
+  hasMore?: Maybe<Scalars['Boolean']>;
+  posts?: Maybe<Array<Maybe<Post>>>;
+};
+
 export type Post = {
   __typename?: 'Post';
   authorId?: Maybe<Scalars['Int']>;
@@ -88,7 +94,7 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
-  allposts?: Maybe<Array<Maybe<Post>>>;
+  allposts?: Maybe<PaginatedPosts>;
   allusers?: Maybe<Array<Maybe<User>>>;
   hello?: Maybe<Scalars['String']>;
   me?: Maybe<User>;
@@ -175,12 +181,12 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register?: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string } | null> | null, user?: { __typename?: 'User', id: number, email: string, username: string, createdAt: any, updatedAt: any } | null } | null };
 
 export type AllpostsQueryVariables = Exact<{
-  limit: Scalars['Int'];
+  limit?: InputMaybe<Scalars['Int']>;
   cursor?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type AllpostsQuery = { __typename?: 'Query', allposts?: Array<{ __typename?: 'Post', id: number, createdAt: any, updatedAt: any, title?: string | null, text?: string | null, points?: number | null, authorId?: number | null } | null> | null };
+export type AllpostsQuery = { __typename?: 'Query', allposts?: { __typename?: 'PaginatedPosts', hasMore?: boolean | null, posts?: Array<{ __typename?: 'Post', id: number, createdAt: any, updatedAt: any, title?: string | null, text?: string | null, points?: number | null, authorId?: number | null } | null> | null } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -292,20 +298,23 @@ export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
 export const AllpostsDocument = gql`
-    query Allposts($limit: Int!, $cursor: String) {
+    query Allposts($limit: Int, $cursor: String) {
   allposts(limit: $limit, cursor: $cursor) {
-    id
-    createdAt
-    updatedAt
-    title
-    text
-    points
-    authorId
+    posts {
+      id
+      createdAt
+      updatedAt
+      title
+      text
+      points
+      authorId
+    }
+    hasMore
   }
 }
     `;
 
-export function useAllpostsQuery(options: Omit<Urql.UseQueryArgs<AllpostsQueryVariables>, 'query'>) {
+export function useAllpostsQuery(options?: Omit<Urql.UseQueryArgs<AllpostsQueryVariables>, 'query'>) {
   return Urql.useQuery<AllpostsQuery, AllpostsQueryVariables>({ query: AllpostsDocument, ...options });
 };
 export const MeDocument = gql`
